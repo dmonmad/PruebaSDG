@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { JwPaginationModule } from 'jw-angular-pagination';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -14,7 +15,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    JwPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]
