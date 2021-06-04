@@ -1,4 +1,22 @@
 .table>tbody {
-    
-    word-break: break-word;
+  word-break: break-word;
+}
+
+::ng-deep {
+  .custom-slider .ngx-slider .ngx-slider-selection {
+    background: #0d6efd;
+  }
+
+
+  .custom-slider .ngx-slider .ngx-slider-tick {
+    background: #65a3ff;
+
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-pointer {
+    background: #333;
+
+  }
+
+
 }

@@ -1,107 +1,108 @@
 <div class="card" *ngIf="items && items.length > 0; else nodata">
 
-  <div class="card-header pb-0 pt-3">
-    <div class="d-flex justify-content-between">
-      <div>
+  <div *ngIf="!isLoadingData; else loading">
+    <div class="card-header pb-0 pt-3">
+      <div class="d-flex justify-content-between">
+        <div>
 
-        <jw-pagination [maxPages]="maxPages" [pageSize]="quantityPerPage" [items]="filteredItems"
-          (changePage)="onChangePage($event)">
-        </jw-pagination>
+          <jw-pagination [maxPages]="maxPages" [pageSize]="quantityPerPage" [items]="filteredItems"
+            (changePage)="onChangePage($event)">
+          </jw-pagination>
+        </div>
+        <div>
+          <button class="btn" (click)="alternateFilter()">{{filtersOpen ? 'Close filters' : 'Open filters'}} <i class="fa fa-filter"></i></button>
+        </div>
       </div>
-      <div>
-        <button class="btn" (click)="alternateFilter()">Open filters <i class="fa fa-filter"></i></button>
-      </div>
-    </div>
-    <div *ngIf="filtersOpen" class="my-3">
+      <div *ngIf="filtersOpen" class="my-3">
         <h1 class="title">Filters</h1>
-      <div class="row">
-        <div class="col-sm-7">
+        <div class="row">
+          <div class="col-sm-7">
 
-          <div class="form-outline">
-            <input [(ngModel)]="titleFilterValue" type="search" placeholder="Title" class="form-control" />
-          </div>
-        </div>
-        <div class="col-sm-5">
-          <div class="d-flex justify-content-between">
-
-            <div class="form-outline mr-2">
-              <input [(ngModel)]="minYearFilterValue" type="number" step="100" placeholder="Minimum year"
-                class="form-control" />
-            </div>
             <div class="form-outline">
-              <input [(ngModel)]="maxYearFilterValue" type="number" step="100" placeholder="Maximum year"
-                class="form-control" />
+              <input [(ngModel)]="titleFilterValue" type="search" placeholder="Title" class="form-control" />
             </div>
           </div>
+          <div class="col-sm-5 custom-slider">
+            <ngx-slider [(value)]="minYearFilterValue" [(highValue)]="maxYearFilterValue" [options]="options"></ngx-slider>
 
+
+          </div>
+        </div>
+        <div class="row mt-2">
+
+          <div class="col-sm-5">
+            <ngx-select-dropdown [(ngModel)]="directorFilterValue" [config]="{search: true, placeholder: 'Director', limitTo: 9 , multiple: false, clearOnSelection: true}"
+              [options]="directorFilterValues"></ngx-select-dropdown>
+
+          </div>
+
+          <div class="col-sm-5">
+
+            <div class="form-outline">
+              <ngx-select-dropdown [(ngModel)]="castFilterValue" [config]="{search: true, placeholder: 'Casting', limitTo: 9, multiple: false, clearOnSelection: true}"
+                [options]="castFilterValues"></ngx-select-dropdown>
+
+            </div>
+
+          </div>
+
+          <div class="col-sm-2">
+
+            <div class="form-outline">
+              <ngx-select-dropdown [(ngModel)]="genreFilterValue" [config]="{search: true, placeholder: 'Genre', limitTo: 9, multiple: false, clearOnSelection: true}"
+                [options]="genreFilterValues"></ngx-select-dropdown>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="row mt-2">
+          <div class="col-sm-9">
+
+            <div class="form-outline">
+              <input [(ngModel)]="notesFilterValue" type="search" placeholder="Notes" class="form-control" />
+            </div>
+
+          </div>
+          <div class="col-sm-3">
+
+            <button class="btn btn-primary w-100" (click)="alternateFilter()">Apply filter <i
+                class="fa fa-filter"></i></button>
+
+          </div>
         </div>
       </div>
-      <div class="row mt-2">
-        <div class="col-sm-5">
 
-          <div class="form-outline">
-            <input [(ngModel)]="directorFilterValue" type="search" placeholder="Director" class="form-control" />
-          </div>
-
-        </div>
-        <div class="col-sm-5">
-
-          <div class="form-outline">
-            <input [(ngModel)]="castFilterValue" type="search" step="100" placeholder="Cast"
-              class="form-control" />
-          </div>
-
-        </div>
-        <div class="col-sm-2">
-
-          <div class="form-outline">
-            <input [(ngModel)]="genreFilterValue" type="search" placeholder="Genre" class="form-control" />
-          </div>
-        </div>
-      </div>
-      <div class="row mt-2">
-        <div class="col-sm-9">
-
-          <div class="form-outline">
-            <input [(ngModel)]="notesFilterValue" type="search" placeholder="Notes" class="form-control" />
-          </div>
-
-        </div>
-        <div class="col-sm-3">
-
-          <button class="btn btn-primary w-100" (click)="alternateFilter()">Apply filter <i class="fa fa-filter"></i></button>
-
-        </div>
-      </div>
     </div>
+
+    <table class=" mt-2 table table-striped border mt-1 table-responsive">
+
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Year</th>
+          <th scope="col">Director</th>
+          <th scope="col">Cast</th>
+          <th scope="col">Genre</th>
+          <th scope="col">Notes</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of paginatedItems">
+          <td>{{item.title}}</td>
+          <td>{{item.year}}</td>
+          <td>{{item.director}}</td>
+          <td>{{item.cast}}</td>
+          <td>{{item.genre}}</td>
+          <td>{{item.notes}}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
 
   </div>
-
-  <table class=" mt-2 table table-striped border mt-1 table-responsive">
-
-    <thead>
-      <tr>
-        <th scope="col">Title</th>
-        <th scope="col">Year</th>
-        <th scope="col">Director</th>
-        <th scope="col">Cast</th>
-        <th scope="col">Genre</th>
-        <th scope="col">Notes</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let item of paginatedItems">
-        <td>{{item.title}}</td>
-        <td>{{item.year}}</td>
-        <td>{{item.director}}</td>
-        <td>{{item.cast}}</td>
-        <td>{{item.genre}}</td>
-        <td>{{item.notes}}</td>
-      </tr>
-    </tbody>
-
-  </table>
 
 </div>
 
@@ -109,4 +110,9 @@
   <div class="card">
     <p> There's no data to show</p>
   </div>
+</ng-template>
+
+
+<ng-template #loading>
+  <app-spinner></app-spinner>
 </ng-template>

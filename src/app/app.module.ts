@@ -8,6 +8,9 @@ import { HomeComponent } from './pages/home/home.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { TableComponent } from './components/table/table.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SelectDropDownModule } from 'ngx-select-dropdown'
+import { NgxSliderModule } from '@angular-slider/ngx-slider'
+
 
 @NgModule({
   declarations: [
@@ -21,7 +24,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     JwPaginationModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    SelectDropDownModule,
+    NgxSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]
