@@ -1,0 +1,10 @@
+<div class="container">
+  <sdg-table *ngIf="!isLoading;else loading" [items]="movies">
+
+  </sdg-table>
+
+  
+  <ng-template #loading>
+    <app-spinner></app-spinner>
+  </ng-template>
+</div>

@@ -4,19 +4,24 @@ import { BrowserModule } from '@angular/platform-browser';
 import { JwPaginationModule } from 'jw-angular-pagination';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './pages/home/home.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { TableComponent } from './components/table/table.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    TableComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    JwPaginationModule
+    JwPaginationModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

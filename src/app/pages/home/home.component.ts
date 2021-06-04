@@ -10,10 +10,8 @@ import { getPagination } from '../../utils/pagination'
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  quantityPerPage: number = 20
   movies: Movie[] = []
-  filteredMovies: Movie[] = []
-  isLoading: boolean = false
+  isLoading : boolean = false;
 
   constructor(private dataSvc: DataService, private uiSvc: UiService) {}
 
@@ -35,13 +33,4 @@ export class HomeComponent implements OnInit {
     )
   }
 
-  // loadFilteredMovies() {
-  //   const { limit, offset } = getPagination(this.page, this.quantity)
-  //   this.filteredMovies = this.movies.slice(offset, offset + limit)
-  // }
-
-  onChangePage(pageOfItems: Array<Movie>) {
-    // update current page of items
-    this.filteredMovies = pageOfItems
-  }
 }
