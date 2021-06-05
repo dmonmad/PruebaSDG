@@ -11,7 +11,7 @@ import { getPagination } from '../../utils/pagination'
 })
 export class HomeComponent implements OnInit {
   movies: Movie[] = []
-  isLoading : boolean = false;
+  isLoading: boolean = false
 
   constructor(private dataSvc: DataService, private uiSvc: UiService) {}
 
@@ -24,7 +24,13 @@ export class HomeComponent implements OnInit {
     this.dataSvc.fetchMoviesData().subscribe(
       (res) => {
         this.movies = res
-        // this.loadFilteredMovies()
+        this.movies.forEach((element) => {
+          if (element.title) element.title = element.title.trim()
+          if (element.cast) element.cast = element.cast.trim()
+          if (element.director) element.director = element.director.trim()
+          if (element.genre) element.genre = element.genre.trim()
+          if (element.notes) element.notes = element.notes.trim()
+        })
       },
       (err) => {},
       () => {
@@ -32,5 +38,4 @@ export class HomeComponent implements OnInit {
       },
     )
   }
-
 }

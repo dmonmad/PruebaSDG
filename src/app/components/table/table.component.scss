@@ -2,6 +2,10 @@
   word-break: break-word;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 ::ng-deep {
   .custom-slider .ngx-slider .ngx-slider-selection {
     background: #0d6efd;
