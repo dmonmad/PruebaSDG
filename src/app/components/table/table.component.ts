@@ -2,6 +2,7 @@ import { ChangeContext, Options } from '@angular-slider/ngx-slider'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { JwPaginationComponent } from 'jw-angular-pagination'
 import { Movie } from 'src/app/models/Movie'
+import { sortString } from 'src/app/utils/utils'
 
 @Component({
   selector: 'sdg-table',
@@ -52,6 +53,13 @@ export class TableComponent implements OnInit {
     this.isLoadingData = true
     this.filteredItems = this.items
 
+    this.loadFilterValues()
+
+    console.timeEnd('initializingData')
+    this.isLoadingData = false
+  }
+
+  private loadFilterValues() {
     this.items.forEach((el, index) => {
       if (index == 0) {
         this.minYearMinValue = el.year
@@ -77,27 +85,25 @@ export class TableComponent implements OnInit {
 
       if (el.director)
         el.director.split(',').forEach((dir) => {
-          if (this.directorFilterValues.indexOf(dir.trim()) == -1) {
-            this.directorFilterValues.push(dir.trim())
+          if (this.directorFilterValues.indexOf(dir) == -1 && dir != '') {
+            this.directorFilterValues.push(dir)
           }
         })
 
       if (el.cast)
         el.cast.split(',').forEach((cast) => {
-          if (this.castFilterValues.indexOf(cast.trim()) == -1) {
-            this.castFilterValues.push(cast.trim())
+          if (this.castFilterValues.indexOf(cast) == -1 && cast != '') {
+            this.castFilterValues.push(cast)
           }
         })
 
       if (el.genre)
         el.genre.split(',').forEach((genre) => {
-          if (this.genreFilterValues.indexOf(genre.trim()) == -1) {
-            this.genreFilterValues.push(genre.trim())
+          if (this.genreFilterValues.indexOf(genre) == -1 && genre != '') {
+            this.genreFilterValues.push(genre)
           }
         })
     })
-    console.timeEnd('initializingData')
-    this.isLoadingData = false
   }
 
   onChangePage(pageOfItems: Array<Movie>) {
@@ -106,7 +112,6 @@ export class TableComponent implements OnInit {
   }
 
   filter() {
-    console.time('time')
     this.filteredItems = this.items.filter((el) => {
       const title = el.title.includes(this.titleFilterValue)
       const miny = el.year >= this.minYearFilterValue
@@ -142,8 +147,7 @@ export class TableComponent implements OnInit {
       return title && miny && maxy && dir && cast && genre && notes
     })
 
-    //this.sortItems('')
-    console.timeEnd('time')
+    this.sortItems('')
     this.pagination.setPage(1)
   }
 
@@ -154,7 +158,7 @@ export class TableComponent implements OnInit {
   sortItems(property: string) {
     if (!this.sortBy) this.sortBy = { ascendent: false, sort: FilterType.Year }
 
-    console.log(property)
+    //Cambiamos el objeto de sorting
     switch (property) {
       case 'title':
         this.sortBy.sort == FilterType.Title
@@ -198,113 +202,22 @@ export class TableComponent implements OnInit {
       if (a && b) {
         switch (this.sortBy!.sort) {
           case FilterType.Title:
-            if (a.title === b.title) {
-              return 0
-            }
-            // nulls sort after anything else
-            else if (a.title === null) {
-              return 1
-            } else if (b.title === null) {
-              return -1
-            }
-            // otherwise, if we're ascending, lowest sorts first
-            else if (this.sortBy!.ascendent) {
-              return a.title < b.title ? -1 : 1
-            }
-            // if descending, highest sorts first
-            else {
-              return a.title < b.title ? 1 : -1
-            }
+            return sortString(a.title, b.title, this.sortBy!.ascendent)
+
           case FilterType.Year:
-            if (a.year === b.year) {
-              return 0
-            }
-            // nulls sort after anything else
-            else if (a.year === null) {
-              return 1
-            } else if (b.year === null) {
-              return -1
-            }
-            // otherwise, if we're ascending, lowest sorts first
-            else if (this.sortBy!.ascendent) {
-              return a.year < b.year ? -1 : 1
-            }
-            // if descending, highest sorts first
-            else {
-              return a.year < b.year ? 1 : -1
-            }
+            return sortString(a.year.toString(), b.year.toString(), this.sortBy!.ascendent)
+
           case FilterType.Director:
-            if (a.director === b.director) {
-              return 0
-            }
-            // nulls sort after anything else
-            else if (a.director === null) {
-              return 1
-            } else if (b.director === null) {
-              return -1
-            }
-            // otherwise, if we're ascending, lowest sorts first
-            else if (this.sortBy!.ascendent) {
-              return a.director < b.director ? -1 : 1
-            }
-            // if descending, highest sorts first
-            else {
-              return a.director < b.director ? 1 : -1
-            }
+            return sortString(a.director, b.director, this.sortBy!.ascendent)
+
           case FilterType.Cast:
-            if (a.cast === b.cast) {
-              return 0
-            }
-            // nulls sort after anything else
-            else if (a.cast === null) {
-              return 1
-            } else if (b.cast === null) {
-              return -1
-            }
-            // otherwise, if we're ascending, lowest sorts first
-            else if (this.sortBy!.ascendent) {
-              return a.cast < b.cast ? -1 : 1
-            }
-            // if descending, highest sorts first
-            else {
-              return a.cast < b.cast ? 1 : -1
-            }
+            return sortString(a.cast, b.cast, this.sortBy!.ascendent)
+
           case FilterType.Genre:
-            if (a.genre === b.genre) {
-              return 0
-            }
-            // nulls sort after anything else
-            else if (a.genre === null) {
-              return 1
-            } else if (b.genre === null) {
-              return -1
-            }
-            // otherwise, if we're ascending, lowest sorts first
-            else if (this.sortBy!.ascendent) {
-              return a.genre < b.genre ? -1 : 1
-            }
-            // if descending, highest sorts first
-            else {
-              return a.genre < b.genre ? 1 : -1
-            }
+            return sortString(a.genre, b.genre, this.sortBy!.ascendent)
+
           case FilterType.Notes:
-            if (a.notes === b.notes) {
-              return 0
-            }
-            // nulls sort after anything else
-            else if (a.notes === null) {
-              return 1
-            } else if (b.notes === null) {
-              return -1
-            }
-            // otherwise, if we're ascending, lowest sorts first
-            else if (this.sortBy!.ascendent) {
-              return a.notes < b.notes ? -1 : 1
-            }
-            // if descending, highest sorts first
-            else {
-              return a.notes < b.notes ? 1 : -1
-            }
+            return sortString(a.notes, b.notes, this.sortBy!.ascendent)
         }
       }
 
@@ -313,6 +226,7 @@ export class TableComponent implements OnInit {
 
     this.pagination.setPage(1)
   }
+
 }
 
 interface SortType {
